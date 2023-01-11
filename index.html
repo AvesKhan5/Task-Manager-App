@@ -1,121 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task-Manager</title>
-
-
-    <!-- <link rel="stylesheet" href="./styles.css"> -->
-    <link rel="stylesheet" href="styles.css">
-
-
-    <!-- font awesome icons  for line number 24-->
-    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Fredoka+One&family=Merienda:wght@500&family=Righteous&family=Smokum&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-</head>
-</head>
-<body>
-    <!-- <section ondragstart="dragstart()" onclick="updateTask()"></section> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Fredoka+One&family=Merienda:wght@500&family=Righteous&family=Smokum&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+    
+    <title>Task Manager App</title>
+  </head>
+  <body>
+    <header class="heading">
+      <h1 class="name">Task Manager</h1>
+      <!-- <img src="./logo.png" class="logo" alt="logo" /> -->
+    </header>
+    <div class="modal" id="todo_form">
+     
+      <div class="body">
+        <input type="text" id="todo_input" placeholder="Task" />
+        <input type="text"id="todo_input_description" placeholder="Description"/>
+        <input type="submit" value="Add Task" id="todo_submit" />
+      </div>
+    </div>
+    <div class="main">
+      <div class="addtaskhead">
+        <button id="add_btn" data-target-modal="#todo_form">Add Task</button>
+      </div>
+      <div class="todo-container">
+        <div class="status" id="no_status">
+          <h1>Open</h1>
+        </div>
+        <div class="status">
+          <h1>In Progress</h1>
+        </div>
+        <div class="status">
+          <h1>In Review</h1>
+        </div>
+        <div class="status">
+          <h1>Done</h1>
+        </div>
+      </div>
+    </div>
 
-    <!-- form page -->
-    <section id="fullscreen-section"></section>
-    <form class="view-upper" id="view-upper">
-        <section class="view-content">
-            <section class="view-head">
-                <h3 id="view-title">Add Task</h3>
-                <button type="button" id="close-btn">
-                    &#x2718;
-                </button>
+    <div id="overlay"></div>
 
-            </section>
-
-
-            <section class="view-main">
-                
-                <section class="view-row">
-                    <section class="view-column">
-                        <label for="title-data">Title:</label>
-                        <input type="text" placeholder="Enter title" class="form-data" id="title-data" name="task_name">
-                    </section>
-                </section>
-
-
-                <section class="view-row grid-row">
-                    <section class="view-column">
-                        <label for="description-data">Description:</label>
-                        <textarea name="task_description"  placeholder="Enter description" class="form-data" id="description-data"
-                        cols="40" rows="10" style="resize: none;"></textarea>
-                    </section>
-                </section>
-
-
-                <section class="view-row">
-                    <section class="view-column">
-                        <label for="labels-data">Labels:</label>
-                        <select name="labels" id="labels-data">
-                            <option value="open">open</option>
-                            <option value="progress">progress</option>
-                            <option value="review">review</option>
-                            <option value="done">done</option>
-                        </select>
-                    </section>
-                </section>
-
-
-                <section class="view-row" id="view-btns">
-                    <button type="submit" id="submit-btn">Submit</button>
-                </section>
-
-            </section>
-
-        </section>
-    </form>
-    <!-- -------------------------------------------------- -->
-
-    <!-- four section of taskbook  -->
-    <section class="view-lower" id="view-lower">
-        <section class="task-content">
-            <section class="task-head">
-                
-                <!-- scalable vector graphics -->
-               
-
-                  <h2>Task <span>Manager</span></h2>
-            </section>
-
-
-
-            <section class="task-main-top">
-                <button type="button" class="btn" id="add-btn">
-                    <span>
-                        ADD NEW TASK
-                    </span>
-                </button>
-            </section>
-
-            <section class="all-task" id="all-task">
-                <section class="stages" >
-                   
-                    <section class="container four-section open-box" id="open-box">Open</section>
-                    
-                    <section class="container four-section progress-box" id="progress-box">In Progress</section>
-                    
-                    <section class="container four-section review-box" id="review-box">In Review</section>
-                    
-                    <section class="container four-section done-box" id="done-box">Done</section>
-                    
-                </section>
-            </section>
-
-        </section>
-    </section>
-
- 
     <script src="App.js"></script>
-    
-</body>
-
+   
+  </body>
 </html>
