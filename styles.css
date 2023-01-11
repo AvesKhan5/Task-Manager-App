@@ -132,6 +132,13 @@
       display: flex;
       flex-wrap: wrap;
     }
+
+    .todo {
+      width: 100%;
+      height: 25%;
+      margin-top: 88px;
+      font-size: 0.8rem;
+    }
   }
   
   .status:nth-child(1) {
@@ -199,8 +206,9 @@
     border-radius: 4px;
     padding: 0.5rem 1rem;
     font-size: 1.5rem;
-    margin: 0.5rem 0;
+    margin: 2.5rem 0;
     font-weight:400px;
+    
   }
   .description {
     font-size: 20px;
