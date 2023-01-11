@@ -1,4 +1,5 @@
-// expressions for validation
+
+      // regular expression for validation
 const strRegex =  /^[a-zA-Z\s]*$/; // containing only letters
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
@@ -7,191 +8,225 @@ const digitRegex = /^\d+$/;
 
 // -------------------------------------------------- //
 
-const countryList = document.getElementById('country-list');
-const fullscreenDiv = document.getElementById('fullscreen-div');
-const modal = document.getElementById('modal');
+// const countryList = document.getElementById('country-list');
+const fullscreenSection = document.getElementById('fullscreen-section');
+const viewUpper = document.getElementById('view-upper');
 const addBtn = document.getElementById('add-btn');
 const closeBtn = document.getElementById('close-btn');
-const modalBtns = document.getElementById('modal-btns');
-const form = document.getElementById('modal');
-const addrBookList = document.querySelector('#addr-book-list');
+const viewBtns = document.getElementById('view-btns');
+const form = document.getElementById('view-upper');
+const alltask = document.querySelector('#all-task');
+// const taskBookList =document.querySelector("#all-task")
 
 // -------------------------------------------------- //
-let addrName = streetAddr = labels = "";
 
-// Address class
-class Address{
-    constructor(id, addrName, streetAddr,labels){
-        this.id = id;
-        this.addrName = addrName;
-        this.streetAddr = streetAddr;
+let  taskName = taskDescription = labels = null;
+// let taskId = new Date().getTime();
+// localStorage.clear();// temporary for checking
+// Task class
+// localStorage.clear();
+class Task{
+    
+    constructor(taskId, taskName, taskDescription,labels){
+        this.taskId = taskId;
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
         this.labels = labels;
     }
+    
 
-    static getAddresses(){
-        let addresses;
-        if(localStorage.getItem('addresses') == null){
-            addresses = [];
+    static getTasks(){
+        let tasks;
+        if(localStorage.getItem('tasks') == null || localStorage.getItem('tasks') == ""){
+            tasks = [];
         } else {
-            addresses = JSON.parse(localStorage.getItem('addresses'));
+            tasks = JSON.parse(localStorage.getItem('tasks'));
         }
-        return addresses;
+        return tasks;
     }
 
-    static addAddress(address){
-        const addresses = Address.getAddresses();
-        addresses.push(address);
-        localStorage.setItem('addresses', JSON.stringify(addresses));
+    static addTask(task){
+        console.log(task)
+        const tasks = Task.getTasks();
+        console.log(tasks);
+        tasks.push(task);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
-    static deleteAddress(id){
-        const addresses = Address.getAddresses();
-        addresses.forEach((address, index) => {
-            if(address.id == id){
-                addresses.splice(index, 1);
+    static deleteTask(taskId){
+        const tasks = Task.getTasks();
+        tasks.forEach((task, index) => {
+            if(task.taskId == taskId){
+                tasks.splice(index, 1);
+                
             }
         });
-        localStorage.setItem('addresses', JSON.stringify(addresses));
+        localStorage.setItem('tasks', JSON.stringify(tasks));
         form.reset();
-        UI.closeModal();
-        addrBookList.innerHTML = "";
-        UI.showAddressList();
+        UI.closeviewUpper();
+        //taskBookList.innerHTML = "";    //to be change taskbooklist
+        UI.showTaskList();
     }
 
-    static updateAddress(item){
-        const addresses = Address.getAddresses();
-        addresses.forEach(address => {
-            if(address.id == item.id){
-                address.addrName = item.addrName;
-                address.streetAddr = item.streetAddr;
-                address.labels = item.labels;
+    static updateTask(item){
+        const tasks = Task.getTasks();
+        tasks.forEach(task => {
+            if(task.taskId == item.taskId){
+                task.taskName = item.taskName;
+                task.taskDescription = item.taskDescription;
+                task.labels = item.labels;
+                
+                task.taskId = new Date().getTime()
             }
         });
-        localStorage.setItem('addresses', JSON.stringify(addresses));
-        addrBookList.innerHTML = "";
-        UI.showAddressList();
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        // alltask.innerHTML = "";
+        // UI.showTaskList();
     }
 }
 
 // UI class
 class UI{
-    static showAddressList(){
-        const addresses = Address.getAddresses();
-        addresses.forEach(address => UI.addToAddressList(address));
+    static showTaskList(){
+        const tasks = Task.getTasks();
+        tasks.forEach(task => UI.addToTaskList(task));
         const notes = document.querySelectorAll('.note');
-        const conts = document.querySelectorAll('#container');
-        let selcon = "open";
+        const fourconts = document.querySelectorAll('.four-section');  //containers
+         let selcon = "open";    //selectcontainer in four section
         notes.forEach(ele => {
-                ele.addEventListener('dragopen' , ()=>{
-                    ele.classList.add("drag")
-                })
-                ele.addEventListener('dragend' , ()=>{
-                    location.reload();
-                    ele.classList.remove("drag");
-                    let newadd , newdes;
-                    addresses.forEach(e => {
-                        if(e.id == ele.dataset.id){
-                            newadd = e.addrName;
-                            newdes = e.streetAddr;
-                        }
-                    })
-                     const addressItem = new Address(ele.dataset.id, newadd, newdes , selcon);
-                     Address.updateAddress(addressItem);
-                    
-                })
-                conts.forEach(ele => {
-                    ele.addEventListener('dragover' , () => {
-                        const tarCon = document.querySelector('.drag');
-                        ele.appendChild(tarCon);
-                        selcon = ele.className;
-                    })
+            let eventofstart ="";
+            ele.addEventListener('dragstart' , (eventofsta)=>{
+                ele.classList.add("drag")
+                eventofstart =eventofsta
+                console.log(eventofsta.target)
             })
+            ele.addEventListener('dragend' , (event)=>{
+                // location.reload();
+                ele.classList.remove("drag");
+                // If(event.target.id == e.NewLabels) {
+                //     NewLabels="open";
+                // } else if (event.target.id == progress) {
+                //     NewLabels = "progress"
+                // } else if (event.target.id== review) {
+                //     NewLabels ="review"
+                // } else {
+                //     NewLabels ="done";
+                // }
+                console.log(event);
+                let newTaskName , newTaskDescription;
+                tasks.forEach(e => {
+                    console.log(e.taskId);
+                    if(e.taskId == ele.taskId){
+                        newTaskName = e.taskName;
+                        newTaskDescription = e.taskDescription;
+                        const taskItem = new Task(ele.taskId, newTaskName, newTaskDescription , selcon);
+                        Task.updateTask(taskItem);
+                        // Task.deleteTask();
+                        location.reload();
+                    }
+                })
+                
+                // const taskItem = new Task(ele.taskId, newTaskName, newTaskDescription , selcon);
+                
+                // Task.updateTask(taskItem);
+                //  Task.deleteTask(event.target.data-id);
+                
+            })
+            fourconts.forEach(ele => {
+                ele.addEventListener('dragover' , () => {
+                    const tarCon = document.querySelector('.drag');
+                    ele.appendChild(tarCon);
+                    selcon = ele.className;
+                })
         })
+    })
     }
 
-    static addToAddressList(address){
-        const tableRow = document.createElement('div');
-        tableRow.setAttribute('data-id', address.id);
-        tableRow.innerHTML = `
-        <div id="note-wrapper">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
-            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-        </svg>
-        <div class="note" id="note" data-id=${address.id} draggable="true" > 
-        <p><span class = "addressing-name">${address.addrName}</span></p>
-       </div>
-       </div>
+    static addToTaskList(task){
+        // console.log(task)
+        // let data=localStorage.getItem("tasks");
+        // console.log(data);
+        const tableRow = document.createElement('section');
+        tableRow.setAttribute('data-id', task.taskId);
+        tableRow.innerHTML = `<section >
+        <section class="note" id="note" data-id=${task.taskId} draggable="true" > 
+        <p><span class = "task-name">${task.taskName}</span></p>
+       </section>
+       </section>
         `;
-        if(address.labels === "open"){
-            document.querySelector('.open').appendChild(tableRow);
-        }else if(address.labels === "progress"){
-            document.querySelector('.progress').appendChild(tableRow);
-        }else if(address.labels === "reviwe"){
-            document.querySelector('.reviwe').appendChild(tableRow);
+        if(task.labels === "open"){
+            document.getElementById("open-box").appendChild(tableRow);
+        }else if(task.labels === "progress"){
+            document.querySelector('.progress-box').appendChild(tableRow);
+        }else if(task.labels === "review"){
+            document.querySelector('.review-box').appendChild(tableRow);
         }else{
-            document.querySelector('.done').appendChild(tableRow);
+            document.querySelector('.done-box').appendChild(tableRow);
         }
+        //here im changing # to . all four
       
 
     }
 
-    static showModalData(id){
-        const addresses = Address.getAddresses();
-        addresses.forEach(address => {
-            if(address.id == id){
-                form.addr_ing_name.value = address.addrName;
-                form.street_addr.value = address.streetAddr;
-                form.labels.value = address.labels;
-                document.getElementById('modal-title').innerHTML = "Change Address Details";
+    static showViewUpperData(taskId){
+        const tasks = Task.getTasks();
+        tasks.forEach(task => {
+            // console.log(task)
+            if(task.taskId == taskId){
+                form.task_name.value = task.taskName;       //title view upper
+                form.task_description.value = task.taskDescription;
+                form.labels.value = task.labels;
+                document.getElementById('view-title').innerHTML = "Change Task Details";
 
-                document.getElementById('modal-btns').innerHTML = `
-                    <button type = "submit" id = "update-btn" data-id = "${id}">Update </button>
-                    <button type = "button" id = "delete-btn" data-id = "${id}">Delete </button>
+                document.getElementById('view-btns').innerHTML = `
+                    <button type = "submit" id = "update-btn" data-id = "${taskId}">Update </button>
+                    <button type = "button" id = "delete-btn" data-id = "${taskId}">Delete </button>
                 `;
             }
         });
     }
 
-    static showModal(){
-        modal.style.display = "block";
-        fullscreenDiv.style.display = "block";
+    static showViewUpper(){
+        viewUpper.style.display = "block";
+        fullscreenSection.style.display = "block";
     }
 
-    static closeModal(){
-        modal.style.display = "none";
-        fullscreenDiv.style.display = "none";
+    static closeviewUpper(){
+        viewUpper.style.display = "none";
+        fullscreenSection.style.display = "none";
     }
 
 
 
 }
 
-// DOM Content will be Loaded
+// DOM Content Loaded
 window.addEventListener('DOMContentLoaded', () => {
-    loadJSON(); // loading country list from json file
     eventListeners();
-    UI.showAddressList();
+    UI.showTaskList();
 });
 
-// Adding event listners
+// event listeners
 function eventListeners(){
-    // show add item modal
+    // show add item viewUpper
     addBtn.addEventListener('click', () => {
         form.reset();
-        document.getElementById('modal-title').innerHTML = "Add Address";
-        UI.showModal();
-        document.getElementById('modal-btns').innerHTML = `
-            <button type = "submit" id = "save-btn"> Save </button>
-        `;
+        document.getElementById("view-btns").innerHTML =
+        `<button type="submit" id="submit-btn">Submit</button>`
+        ;
+        document.getElementById("view-title").innerText ="Add Task";
+        
+        UI.showViewUpper();
     });
 
-    // close add item modal
-    closeBtn.addEventListener('click', UI.closeModal);
+    // close add item viewUpper
+    closeBtn.addEventListener('click', UI.closeviewUpper);
 
-    // add an address item
-    modalBtns.addEventListener('click', (event) => {
+    // add a description item
+    viewBtns.addEventListener('click', (event) => {
         event.preventDefault();
-        if(event.target.id == "save-btn"){
+        // console.log(event.target)
+        if(event.target.id == "submit-btn"){
             let isFormValid = getFormData();
             if(!isFormValid){
                 form.querySelectorAll('input').forEach(input => {
@@ -200,47 +235,51 @@ function eventListeners(){
                     }, 1500);
                 });
             } else {
-                let allItem = Address.getAddresses();
-                let lastItemId = (allItem.length > 0) ? allItem[allItem.length - 1].id : 0;
-                lastItemId++;
+                let allItem = Task.getTasks();
+                let lastTaskId = (allItem.length > 0) ? allItem[allItem.length - 1].id : 0;
+                lastTaskId++;
 
-                const addressItem = new Address(lastItemId, addrName, streetAddr,labels);
-                Address.addAddress(addressItem);
-                UI.closeModal();
-                UI.addToAddressList(addressItem);
+                const taskItem = new Task(lastTaskId, taskName, taskDescription,labels);
+                Task.addTask(taskItem);
+                UI.closeviewUpper();
+                UI.addToTaskList(taskItem);
                 form.reset();
             }
         }
     });
 
     // table row items
-    addrBookList.addEventListener('click', (event) => {
-        UI.showModal();
+    alltask.addEventListener('click', (event) => {
+        UI.showViewUpper();
         let trElement;
         if(event.target.parentElement.tagName == "P"){
             trElement = event.target.parentElement.parentElement;
         }
 
-        if(event.target.parentElement.tagName == "DIV"){
+        if(event.target.parentElement.tagName == "SECTION"){
             trElement = event.target.parentElement;
         }
-        let viewID = trElement.dataset.id;
-        UI.showModalData(viewID);
+        let viewID = trElement.taskId;
+        UI.showViewUpperData(viewID);
     });
 
-    // delete an address item
-    modalBtns.addEventListener('click', (event) => {
+    // delete an task item
+    viewBtns.addEventListener('click', (event) => {
         if(event.target.id == 'delete-btn'){
-            Address.deleteAddress(event.target.dataset.id);
+            Task.deleteTask(event.target.data-id);
         }
     });
 
-    // update an address item
-    modalBtns.addEventListener('click', (event) => {
+    // update an task item
+    viewBtns.addEventListener('click', (event) => {
         event.preventDefault();
-        location.reload();
-        if(event.target.id == "update-btn"){
-            let id = event.target.dataset.id;
+        // location.reload();
+        if(event.target.id === "update-btn"){
+            console.log(event)
+            let taskName=form.task_name.value
+            let taskDescription = form.task_description.value ;
+            let lables =    form.labels.value ;
+            let taskId = new Date().getTime();
             let isFormValid = getFormData();
             if(!isFormValid){
                 form.querySelectorAll('input').forEach(input => {
@@ -249,60 +288,45 @@ function eventListeners(){
                     }, 1500);
                 });
             } else {
-                const addressItem = new Address(id, addrName, streetAddr, labels);
-                Address.updateAddress(addressItem);
-                UI.closeModal();
+                const taskItem = new Task(taskId, taskName, taskDescription, labels);
+                Task.updateTask(taskItem);
+                // Task.deleteTask(taskId);
+                UI.closeviewUpper();
                 form.reset();
             }
         }
-        
+        if(event.target.id == 'delete-btn'){
+            console.log(event.target.dataset.taskId);
+            Task.deleteTask(event.target.dataset.taskId);
+        }
+        document.getElementById("view-btns").innerHTML =
+        `<button type="submit" id="submit-btn">Submit</button>`
+        ;
+        document.getElementById("view-title").innerText ="Add Task";
+        location.reload();
     });
 }
 
 
-// load countries list
-function loadJSON(){
-    fetch('countries.json')
-    .then(response => response.json())
-    .then(data => {
-        let html = "";
-        data.forEach(country => {
-            html += `
-                <option> ${country.country} </option>
-            `;
-        });
-    })
-}
+
+
 
 // get form data
 function getFormData(){
-    let inputValidStatus = [];
-    // console.log(form.addr_ing_name.value, form.first_name.value, form.last_name.value, form.email.value, form.phone.value, form.street_addr.value, form.postal_code.value, form.city.value, form.country.value, form.labels.value);
 
-    if(!strRegex.test(form.addr_ing_name.value) || form.addr_ing_name.value.trim().length == 0){
-        addErrMsg(form.addr_ing_name);
-        inputValidStatus[0] = false;
+        if( form.task_name.value.trim().length == 0){ 
+        addErrMsg(form.task_name);
+        return  false;
     } else {
-        addrName = form.addr_ing_name.value;
-        inputValidStatus[0] = true;
+        taskName = form.task_name.value;
+        taskDescription =form.task_description.value;
+        labels =form.labels.value;
     }
-
-   
-
-    if(!(form.street_addr.value.trim().length > 0)){
-        addErrMsg(form.street_addr);
-        inputValidStatus[1] = false;
-    } else {
-        streetAddr = form.street_addr.value;
-        inputValidStatus[1] = true;
-    }
-
-  
-    labels = form.labels.value;
-    return inputValidStatus.includes(false) ? false : true;
+    return true;
 }
 
 
 function addErrMsg(inputBox){
-    inputBox.classList.add('errorMsg');
+    alert(`Plz Enter ${inputBox}`);
 }
+  

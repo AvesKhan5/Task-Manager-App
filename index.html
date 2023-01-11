@@ -1,91 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager App</title>
-    
-    <!-- font-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Fredoka+One&family=Merienda:wght@500&family=Righteous&family=Smokum&display=swap" rel="stylesheet">
+    <title>Task-Manager</title>
 
+
+    <!-- <link rel="stylesheet" href="./styles.css"> -->
     <link rel="stylesheet" href="styles.css">
+
+
+    <!-- font awesome icons  for line number 24-->
+    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Fredoka+One&family=Merienda:wght@500&family=Righteous&family=Smokum&display=swap" rel="stylesheet">
+    
+</head>
 </head>
 <body>
-    
-    
-    <div id = "fullscreen-div"></div>
-    <form class = "modal" id = "modal">
-        <div class = "modal-content">
-            <div class = "modal-head">
-                <h3 id = "modal-title">Add Task</h3>
-                <button type="button" id = "close-btn">
-                    <i class = "fas fa-times"></i>
+    <!-- <section ondragstart="dragstart()" onclick="updateTask()"></section> -->
+
+    <!-- form page -->
+    <section id="fullscreen-section"></section>
+    <form class="view-upper" id="view-upper">
+        <section class="view-content">
+            <section class="view-head">
+                <h3 id="view-title">Add Task</h3>
+                <button type="button" id="close-btn">
+                    &#x2718;
                 </button>
-            </div>
-            <div class = "modal-main">
-                <div class = "modal-row">
-                    <div class = "modal-col">
-                        <label for="">TITLE</label>
-                        <input type = "text" placeholder="Title of your note" class = "form-control" name = "addr_ing_name">
-                    </div>
-                </div>
+
+            </section>
 
 
-                <div class = "modal-row grid-row">
-                    <div class = "modal-col">
-                        <label for="">Discription</label>
-                        <textarea type = "text" placeholder="discription of your notes" class = "form-control" name = "street_addr" cols="40" rows="10"></textarea>
-                    </div>
-                </div>
+            <section class="view-main">
+                
+                <section class="view-row">
+                    <section class="view-column">
+                        <label for="title-data">Title:</label>
+                        <input type="text" placeholder="Enter title" class="form-data" id="title-data" name="task_name">
+                    </section>
+                </section>
 
-                <div class = "modal-row">
-                    <div class = "modal-col">
-                        <label for = "">Labels</label>
-                        <select name = "labels">
-                            <option value = "open">open</option>
-                            <option value = "progress">in progress</option>
-                            <option value = "reviwe">in reviwe</option>
-                            <option value = "done">done</option>
+
+                <section class="view-row grid-row">
+                    <section class="view-column">
+                        <label for="description-data">Description:</label>
+                        <textarea name="task_description"  placeholder="Enter description" class="form-data" id="description-data"
+                        cols="40" rows="10" style="resize: none;"></textarea>
+                    </section>
+                </section>
+
+
+                <section class="view-row">
+                    <section class="view-column">
+                        <label for="labels-data">Labels:</label>
+                        <select name="labels" id="labels-data">
+                            <option value="open">open</option>
+                            <option value="progress">progress</option>
+                            <option value="review">review</option>
+                            <option value="done">done</option>
                         </select>
-                    </div>
-                </div>
+                    </section>
+                </section>
 
-                <div class = "modal-row" id = "modal-btns">
-                    <button type = "submit" id = "save-btn">Save</button>
-                </div>
-            </div>
-        </div>
+
+                <section class="view-row" id="view-btns">
+                    <button type="submit" id="submit-btn">Submit</button>
+                </section>
+
+            </section>
+
+        </section>
     </form>
-    
+    <!-- -------------------------------------------------- -->
 
-    
-    
-    <div class = "addr-book" id = "addr-book">
-        <div class = "addr-book-content">
-            <div class = "addr-book-head">
-                <h2>Task<span>Manager</span></h2>
-            </div>
+    <!-- four section of taskbook  -->
+    <section class="view-lower" id="view-lower">
+        <section class="task-content">
+            <section class="task-head">
+                
+                <!-- scalable vector graphics -->
+               
 
-            <div class = "addr-book-top">
-                <button type = "button" class = "btn" id = "add-btn">
-                    <span>ADD NEW TASK</span>
+                  <h2>Task <span>Manager</span></h2>
+            </section>
+
+
+
+            <section class="task-main-top">
+                <button type="button" class="btn" id="add-btn">
+                    <span>
+                        ADD NEW TASK
+                    </span>
                 </button>
-            </div>
+            </section>
 
-            <div class = "addr-book-list" id = "addr-book-list">
-               <div class="stages" >
-                <div class="open" id="container"> <h2>  OPEN</h2></div>
-                <div class="progress" id="container"> <h2>  IN PROGRESS</h2></div>
-                <div class="reviwe" id="container"> <h2>  IN REVIWE</h2></div>
-                <div class="done" id="container"> <h2>  DONE</h2></div>    
-            </div>
-            </div>
-        </div>
-    </div>
-    
+            <section class="all-task" id="all-task">
+                <section class="stages" >
+                   
+                    <section class="container four-section open-box" id="open-box">Open</section>
+                    
+                    <section class="container four-section progress-box" id="progress-box">In Progress</section>
+                    
+                    <section class="container four-section review-box" id="review-box">In Review</section>
+                    
+                    <section class="container four-section done-box" id="done-box">Done</section>
+                    
+                </section>
+            </section>
 
+        </section>
+    </section>
+
+ 
     <script src="App.js"></script>
+    
 </body>
+
 </html>
